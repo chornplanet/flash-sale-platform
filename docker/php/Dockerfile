@@ -31,6 +31,11 @@ RUN apt-get update && apt-get install -y \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
+RUN { \
+        echo '[www]'; \
+        echo 'clear_env = no'; \
+    } > /usr/local/etc/php-fpm.d/zz-docker-env.conf
+
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 COPY composer.json composer.lock ./
