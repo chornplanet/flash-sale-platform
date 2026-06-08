@@ -1,8 +1,6 @@
 # Flash Sale Platform
 
-# Setup Instruction
-
-## Getting start
+## Getting started
 
 ```bash
 git clone https://github.com/chornplanet/flash-sale-platform
@@ -11,13 +9,13 @@ cd flash-sale-platform
 docker compose up -d --build
 ```
 
-## Readiness Check:
+## Readiness check
 
 ```
 docker compose exec app php artisan app:healthy-check
 ```
 
-## Seed Database 100K orders:
+## Seed the database with 100K orders
 
 ```
 docker compose exec app php artisan db:seed

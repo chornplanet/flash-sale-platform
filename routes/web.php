@@ -4,10 +4,6 @@ use Illuminate\Support\Facades\Route;
 use League\CommonMark\GithubFlavoredMarkdownConverter;
 
 Route::get('/', function () {
-    return view('welcome');
-});
-
-Route::get('/readme', function () {
     $markdown = file_get_contents(base_path('README.md'));
     $markdown = str_replace('](.docs/', '](readme-assets/', $markdown);
     $toc = [];
@@ -43,17 +39,19 @@ Route::get('/readme', function () {
         'allow_unsafe_links' => false,
     ]);
 
-    return view('readmen', [
+    return view('welcome', [
         'readmeHtml' => $converter->convert($markdown)->getContent(),
         'toc' => $toc,
     ]);
-})->name('readme');
+})->name('home');
 
-Route::get('/readme.css', function () {
-    return response()->file(resource_path('css/readme.css'), [
+Route::redirect('/readme', '/')->name('readme');
+
+Route::get('/welcome.css', function () {
+    return response()->file(resource_path('css/welcome.css'), [
         'Content-Type' => 'text/css; charset=UTF-8',
     ]);
-})->name('readme.styles');
+})->name('welcome.styles');
 
 Route::get('/readme-assets/{path}', function (string $path) {
     return response()->file(base_path('.docs/'.$path));

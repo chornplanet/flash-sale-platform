@@ -7,7 +7,17 @@ use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 
-return Application::configure(basePath: dirname(__DIR__))
+$basePath = dirname(__DIR__);
+$application = Application::configure(basePath: $basePath);
+$dockerEnvironmentPath = $basePath.'/docker/environment/app.env';
+
+if (! is_file($basePath.'/.env') && is_file($dockerEnvironmentPath)) {
+    $application->create()
+        ->useEnvironmentPath(dirname($dockerEnvironmentPath))
+        ->loadEnvironmentFrom(basename($dockerEnvironmentPath));
+}
+
+return $application
     ->withSingletons(PHP_OS_FAMILY === 'Windows' ? [
         'files' => fn () => new WindowsFilesystem,
     ] : [])

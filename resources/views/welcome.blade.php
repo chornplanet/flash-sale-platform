@@ -7,20 +7,51 @@
 
     <title>Flash Sale Platform</title>
 
-    <link rel="stylesheet" href="{{ asset('css/welcome.css') }}">
+    <link rel="stylesheet" href="{{ route('welcome.styles') }}">
 </head>
 
-<body class="welcome-page">
-    <main class="welcome-panel">
-        <h1 class="welcome-title">
-            Flash Sale
-            <span>Platform</span>
-        </h1>
-        <p class="welcome-copy">
-            A production-minded Laravel API for flash-sale ordering, stock protection,
-            authenticated checkout, and queue-backed operational workflows.
-        </p>
-        <a class="welcome-status" href="{{ route('readme') }}">README</a>
+<body class="readme-page">
+    <header class="readme-top">
+        <nav class="readme-top-nav" aria-label="README navigation">
+            <div class="readme-top-nav-brand">
+                <a href="{{ url('/') }}">Flash Sale Platform</a>
+            </div>
+
+            <div class="readme-top-nav-links">
+                <a href="{{ url('/') }}">Home</a>
+                <a href="{{ url(config('horizon.path', 'horizon')) }}">Horizon</a>
+                <a href="{{ url(config('telescope.path', 'telescope')) }}">Telescope</a>
+            </div>
+        </nav>
+
+        <div class="readme-top-content">
+            <p class="readme-kicker">Project documentation</p>
+            <h1>Flash Sale Platform</h1>
+            <p>
+                Setup, architecture, database design, queue strategy, performance notes,
+                code review findings, and test coverage in one readable project document.
+            </p>
+        </div>
+    </header>
+
+    <main class="readme-layout">
+        <article class="readme-document">
+            {!! $readmeHtml !!}
+        </article>
+
+        <aside class="readme-right-panel" aria-label="Table of contents">
+            <div class="readme-contents">
+                <p class="readme-panel-label">Contents</p>
+                <nav>
+                    @foreach ($toc as $item)
+                        <a class="readme-contents-link readme-contents-level-{{ $item['level'] }}"
+                            href="#{{ $item['slug'] }}">
+                            {{ $item['title'] }}
+                        </a>
+                    @endforeach
+                </nav>
+            </div>
+        </aside>
     </main>
 </body>
 

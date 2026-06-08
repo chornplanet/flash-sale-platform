@@ -1,8 +1,8 @@
 :root {
     color-scheme: light;
     font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    background: #f7f8fa;
-    color: #111827;
+    background: #f5f7fb;
+    color: #172033;
 }
 
 * {
@@ -16,26 +16,56 @@ html {
 body {
     margin: 0;
     background:
-        linear-gradient(135deg, rgba(220, 38, 38, 0.06), transparent 28rem),
-        linear-gradient(315deg, rgba(14, 165, 233, 0.07), transparent 30rem),
-        #f7f8fa;
+        linear-gradient(140deg, rgba(225, 29, 72, 0.07), transparent 34rem),
+        linear-gradient(320deg, rgba(8, 145, 178, 0.08), transparent 32rem),
+        linear-gradient(180deg, #ffffff 0, #f5f7fb 28rem);
 }
 
 .readme-top {
-    padding: 24px;
-    border-bottom: 1px solid rgba(17, 24, 39, 0.08);
-    background: rgba(255, 255, 255, 0.82);
+    padding: 22px 28px 58px;
+    border-bottom: 1px solid rgba(23, 32, 51, 0.08);
+    background: rgba(255, 255, 255, 0.78);
+    backdrop-filter: blur(18px);
 }
 
 .readme-top-nav {
-    width: min(1440px, 100%);
+    width: min(1500px, 100%);
     margin: 0 auto;
     display: flex;
+    align-items: center;
     justify-content: space-between;
-    gap: 16px;
-    color: #374151;
-    font-size: 0.95rem;
+    gap: 24px;
+    min-height: 44px;
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    padding: 8px;
+    /* border: 1px solid rgba(23, 32, 51, 0.08); */
+    /* border-radius: 8px; */
+    background: rgba(255, 255, 255, 0.88);
+    /* box-shadow: 0 16px 48px rgba(15, 23, 42, 0.08); */
+    backdrop-filter: blur(18px);
+    color: #334155;
+    font-size: 0.94rem;
     font-weight: 700;
+}
+
+.readme-top-nav-brand a {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: #111827;
+    font-size: 1rem;
+    font-weight: 850;
+}
+
+.readme-top-nav-brand a::before {
+    content: "";
+    width: 10px;
+    height: 10px;
+    border-radius: 999px;
+    background: #dc2626;
+    box-shadow: 0 0 0 6px rgba(220, 38, 38, 0.11);
 }
 
 .readme-top-nav a {
@@ -44,12 +74,32 @@ body {
 }
 
 .readme-top-nav a:hover {
-    color: #dc2626;
+    color: #b91c1c;
+}
+
+.readme-top-nav-links {
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 6px;
+    padding: 5px;
+    border-radius: 8px;
+    background: rgba(248, 250, 252, 0.9);
+}
+
+.readme-top-nav-links a {
+    padding: 8px 12px;
+    border-radius: 7px;
+    color: #475569;
+}
+
+.readme-top-nav-links a:hover {
+    background: rgba(220, 38, 38, 0.08);
 }
 
 .readme-top-content {
-    width: min(1440px, 100%);
-    margin: 72px auto 52px;
+    width: min(1500px, 100%);
+    margin: 70px auto 0;
 }
 
 .readme-kicker {
@@ -61,16 +111,16 @@ body {
 }
 
 .readme-top h1 {
-    max-width: 780px;
+    max-width: 960px;
     margin: 0;
     color: #111827;
-    font-size: clamp(2.4rem, 7vw, 5rem);
+    font-size: clamp(2.6rem, 7vw, 5.4rem);
     line-height: 0.98;
     letter-spacing: 0;
 }
 
 .readme-top p:last-child {
-    max-width: 720px;
+    max-width: 760px;
     margin: 24px 0 0;
     color: #4b5563;
     font-size: 1.12rem;
@@ -78,95 +128,47 @@ body {
 }
 
 .readme-layout {
-    width: min(1440px, calc(100% - 32px));
-    margin: 36px auto 72px;
+    width: min(1500px, calc(100% - 40px));
+    margin: 42px auto 84px;
     display: grid;
-    grid-template-columns: minmax(220px, 260px) minmax(0, 1fr) minmax(220px, 280px);
-    gap: 24px;
+    grid-template-columns: minmax(0, 1fr) minmax(410px, 480px);
+    gap: 28px;
     align-items: start;
 }
 
-.readme-left-panel,
 .readme-right-panel {
     position: sticky;
     top: 24px;
 }
 
-.readme-left-panel,
 .readme-contents {
-    padding: 22px;
-    background: rgba(255, 255, 255, 0.88);
-    border: 1px solid rgba(17, 24, 39, 0.08);
+    padding: 18px;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(23, 32, 51, 0.08);
     border-radius: 8px;
-    box-shadow: 0 18px 56px rgba(17, 24, 39, 0.07);
-}
-
-.readme-panel-section + .readme-panel-section {
-    margin-top: 24px;
-    padding-top: 22px;
-    border-top: 1px solid rgba(17, 24, 39, 0.08);
+    box-shadow: 0 18px 52px rgba(15, 23, 42, 0.08);
 }
 
 .readme-panel-label {
-    margin: 0 0 10px;
+    margin: 0 0 12px;
     color: #b91c1c;
     font-size: 0.72rem;
     font-weight: 800;
     text-transform: uppercase;
 }
 
-.readme-left-panel h2 {
-    margin: 0;
-    color: #111827;
-    font-size: 1.12rem;
-    line-height: 1.25;
-}
-
-.readme-left-panel p:not(.readme-panel-label) {
-    margin: 12px 0 0;
-    color: #4b5563;
-    font-size: 0.92rem;
-    line-height: 1.65;
-}
-
-.readme-left-panel a {
-    display: block;
-    color: #374151;
-    font-size: 0.94rem;
-    font-weight: 700;
-    line-height: 1.7;
-    text-decoration: none;
-}
-
-.readme-left-panel a:hover {
-    color: #dc2626;
-}
-
-.readme-left-panel code {
-    display: block;
-    overflow-x: auto;
-    padding: 10px 12px;
-    border-radius: 8px;
-    background: #111827;
-    color: #f9fafb;
-    font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
-    font-size: 0.82rem;
-    line-height: 1.5;
-}
-
 .readme-contents nav {
     display: grid;
     gap: 6px;
-    max-height: calc(100vh - 130px);
+    max-height: calc(100vh - 112px);
     overflow-y: auto;
     padding-right: 4px;
 }
 
 .readme-contents-link {
     display: block;
-    padding: 7px 9px;
-    border-radius: 7px;
-    color: #374151;
+    padding: 8px 10px;
+    color: #475569;
     font-size: 0.88rem;
     font-weight: 700;
     line-height: 1.35;
@@ -180,9 +182,9 @@ body {
 
 .readme-contents-level-1 {
     margin-top: 8px;
-    padding: 10px 11px;
-    border: 1px solid rgba(220, 38, 38, 0.16);
-    background: linear-gradient(135deg, rgba(220, 38, 38, 0.10), rgba(255, 255, 255, 0.72));
+    padding: 10px 12px;
+    border: 1px solid rgba(220, 38, 38, 0.18);
+    background: linear-gradient(135deg, rgba(220, 38, 38, 0.11), rgba(8, 145, 178, 0.05));
     color: #991b1b;
     font-size: 0.92rem;
     font-weight: 800;
@@ -211,11 +213,12 @@ body {
 }
 
 .readme-document {
-    padding: 48px;
-    background: rgba(255, 255, 255, 0.92);
-    border: 1px solid rgba(17, 24, 39, 0.08);
+    min-width: 0;
+    padding: clamp(32px, 5vw, 64px);
+    background: rgba(255, 255, 255, 0.94);
+    border: 1px solid rgba(23, 32, 51, 0.08);
     border-radius: 8px;
-    box-shadow: 0 24px 80px rgba(17, 24, 39, 0.08);
+    box-shadow: 0 26px 86px rgba(15, 23, 42, 0.09);
 }
 
 .readme-document > :first-child {
@@ -232,16 +235,16 @@ body {
 }
 
 .readme-document h1 {
-    margin: 0 0 28px;
-    padding-bottom: 18px;
-    border-bottom: 1px solid rgba(17, 24, 39, 0.10);
-    font-size: 2.25rem;
+    margin: 0 0 32px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid rgba(23, 32, 51, 0.10);
+    font-size: clamp(2rem, 4vw, 3rem);
     line-height: 1.1;
 }
 
 .readme-document h2 {
-    margin: 44px 0 14px;
-    font-size: 1.55rem;
+    margin: 48px 0 14px;
+    font-size: 1.65rem;
     line-height: 1.25;
 }
 
@@ -254,8 +257,8 @@ body {
 .readme-document p,
 .readme-document li {
     color: #374151;
-    font-size: 1rem;
-    line-height: 1.75;
+    font-size: 1.02rem;
+    line-height: 1.78;
 }
 
 .readme-document a {
@@ -289,7 +292,7 @@ body {
 .readme-document pre {
     overflow-x: auto;
     margin: 18px 0 26px;
-    padding: 18px;
+    padding: 20px;
     border: 1px solid rgba(17, 24, 39, 0.08);
     border-radius: 8px;
     background: #111827;
@@ -351,20 +354,6 @@ body {
     .readme-layout {
         grid-template-columns: minmax(0, 1fr) minmax(220px, 280px);
     }
-
-    .readme-left-panel {
-        position: static;
-        grid-column: 1 / -1;
-        display: grid;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 18px;
-    }
-
-    .readme-panel-section + .readme-panel-section {
-        margin-top: 0;
-        padding-top: 0;
-        border-top: 0;
-    }
 }
 
 @media (max-width: 860px) {
@@ -392,23 +381,19 @@ body {
         flex-direction: column;
     }
 
+    .readme-top-nav-links {
+        width: 100%;
+        justify-content: flex-start;
+        overflow-x: auto;
+    }
+
     .readme-top-content {
         margin: 48px auto 34px;
     }
 
     .readme-layout {
-        width: min(100% - 24px, 1440px);
+        width: min(100% - 24px, 1500px);
         margin-top: 24px;
-    }
-
-    .readme-left-panel {
-        display: block;
-    }
-
-    .readme-panel-section + .readme-panel-section {
-        margin-top: 24px;
-        padding-top: 22px;
-        border-top: 1px solid rgba(17, 24, 39, 0.08);
     }
 
     .readme-document {
