@@ -40,6 +40,10 @@ prepare_runtime_directories() {
     chmod -R ug+rwX bootstrap/cache storage
 }
 
+clear_runtime_cache() {
+    php artisan optimize:clear
+}
+
 load_environment_file() {
     if [ ! -f "$ENV_FILE" ]; then
         return
@@ -97,10 +101,12 @@ case "${1:-app}" in
         sync_dotenv_file
         prepare_runtime_directories
         load_environment_file
+        clear_runtime_cache
         php artisan app:install
         sync_dotenv_file
         prepare_runtime_directories
         load_environment_file
+        clear_runtime_cache
         write_php_fpm_environment
         touch storage/app/docker-installed
         exec php-fpm
@@ -109,6 +115,7 @@ case "${1:-app}" in
         sync_dotenv_file
         prepare_runtime_directories
         load_environment_file
+        clear_runtime_cache
         exec php artisan horizon
         ;;
     *)
