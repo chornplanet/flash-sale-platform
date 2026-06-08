@@ -13,6 +13,10 @@ normalize_env_value() {
     printf '%s' "$value"
 }
 
+escape_php_fpm_value() {
+    printf '%s' "$1" | sed 's/\\/\\\\/g; s/"/\\"/g'
+}
+
 load_environment_file() {
     if [ ! -f "$ENV_FILE" ]; then
         return
@@ -57,7 +61,8 @@ write_php_fpm_environment() {
 
             if printf '%s' "$key" | grep -Eq '^[A-Za-z_][A-Za-z0-9_]*$'; then
                 value="$(normalize_env_value "$value")"
-                printf 'env[%s] = %s\n' "$key" "$value"
+                value="$(escape_php_fpm_value "$value")"
+                printf 'env[%s] = "%s"\n' "$key" "$value"
             fi
         done < "$ENV_FILE"
     } > "$fpm_env_file"
