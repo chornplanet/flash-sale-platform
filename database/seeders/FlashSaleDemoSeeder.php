@@ -9,6 +9,7 @@ use App\Models\SalesEvent;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Laravel\Telescope\Telescope;
 use RuntimeException;
 
 class FlashSaleDemoSeeder extends Seeder
@@ -29,85 +30,87 @@ class FlashSaleDemoSeeder extends Seeder
     {
         DB::disableQueryLog();
 
-        $this->seedUsers();
+        Telescope::withoutRecording(function (): void {
+            $this->seedUsers();
 
-        $this->seedProducts();
+            $this->seedProducts();
 
-        $this->seedSalesEvents();
+            $this->seedSalesEvents();
 
-        $productIds = Product::query()->pluck('id')->all();
-        $eventIds = SalesEvent::query()->pluck('id')->all();
+            $productIds = Product::query()->pluck('id')->all();
+            $eventIds = SalesEvent::query()->pluck('id')->all();
 
-        $this->seedEventProducts($eventIds, $productIds);
+            $this->seedEventProducts($eventIds, $productIds);
 
-        $userIds = User::query()->pluck('id')->all();
-        $eventProducts = DB::table('product_sales_event')
-            ->select('product_id', 'sales_event_id', 'event_price')
-            ->orderBy('sales_event_id')
-            ->orderBy('product_id')
-            ->get()
-            ->all();
+            $userIds = User::query()->pluck('id')->all();
+            $eventProducts = DB::table('product_sales_event')
+                ->select('product_id', 'sales_event_id', 'event_price')
+                ->orderBy('sales_event_id')
+                ->orderBy('product_id')
+                ->get()
+                ->all();
 
-        $existingOrders = Order::query()->count();
+            $existingOrders = Order::query()->count();
 
-        if ($existingOrders >= self::ORDER_COUNT) {
-            $this->command->info("Orders already seeded ({$existingOrders}/".self::ORDER_COUNT.'). Skipping orders.');
+            if ($existingOrders >= self::ORDER_COUNT) {
+                $this->command->info("Orders already seeded ({$existingOrders}/".self::ORDER_COUNT.'). Skipping orders.');
+                $this->seedMissingOrderLogs();
+
+                $this->command->info('Seeder completed.');
+
+                return;
+            }
+
+            $this->command->info('Seeding orders to 100k...');
+
+            $inserted = $existingOrders;
+            $candidateIndex = 0;
+            $possibleCombinations = count($userIds) * count($eventProducts);
+            $statuses = ['confirmed', 'confirmed', 'confirmed', 'cancelled', 'failed'];
+            $seededAt = now();
+
+            if ($existingOrders + $possibleCombinations < self::ORDER_COUNT) {
+                throw new RuntimeException('Not enough unique user/product/event combinations to seed '.self::ORDER_COUNT.' orders.');
+            }
+
+            while ($inserted < self::ORDER_COUNT && $candidateIndex < $possibleCombinations) {
+                $orders = [];
+
+                while (count($orders) < self::BATCH_SIZE && $candidateIndex < $possibleCombinations) {
+                    $pair = $eventProducts[$candidateIndex % count($eventProducts)];
+                    $userId = $userIds[intdiv($candidateIndex, count($eventProducts))];
+                    $orderedAt = $seededAt->copy()->subMinutes($candidateIndex % (30 * 24 * 60));
+
+                    $orders[] = [
+                        'user_id' => $userId,
+                        'product_id' => $pair->product_id,
+                        'sales_event_id' => $pair->sales_event_id,
+                        'order_no' => sprintf('ORD-%06d-%06d-%06d', $userId, $pair->product_id, $pair->sales_event_id),
+                        'status' => $statuses[$candidateIndex % count($statuses)],
+                        'price' => $pair->event_price ?? 100 + ($candidateIndex % 4900),
+                        'quantity' => 1,
+                        'ordered_at' => $orderedAt,
+                        'created_at' => $seededAt,
+                        'updated_at' => $seededAt,
+                    ];
+
+                    $candidateIndex++;
+                }
+
+                // Existing rows are ignored, then the deterministic candidate walk continues until 100k are inserted.
+                $inserted += DB::table('orders')->insertOrIgnore($orders);
+
+                $this->command->info('Seeded orders: '.min($inserted, self::ORDER_COUNT).'/'.self::ORDER_COUNT);
+            }
+
+            if ($inserted < self::ORDER_COUNT) {
+                throw new RuntimeException("Only seeded {$inserted} orders before exhausting unique combinations.");
+            }
+
             $this->seedMissingOrderLogs();
 
             $this->command->info('Seeder completed.');
-
-            return;
-        }
-
-        $this->command->info('Seeding orders to 100k...');
-
-        $inserted = $existingOrders;
-        $candidateIndex = 0;
-        $possibleCombinations = count($userIds) * count($eventProducts);
-        $statuses = ['confirmed', 'confirmed', 'confirmed', 'cancelled', 'failed'];
-        $seededAt = now();
-
-        if ($existingOrders + $possibleCombinations < self::ORDER_COUNT) {
-            throw new RuntimeException('Not enough unique user/product/event combinations to seed '.self::ORDER_COUNT.' orders.');
-        }
-
-        while ($inserted < self::ORDER_COUNT && $candidateIndex < $possibleCombinations) {
-            $orders = [];
-
-            while (count($orders) < self::BATCH_SIZE && $candidateIndex < $possibleCombinations) {
-                $pair = $eventProducts[$candidateIndex % count($eventProducts)];
-                $userId = $userIds[intdiv($candidateIndex, count($eventProducts))];
-                $orderedAt = $seededAt->copy()->subMinutes($candidateIndex % (30 * 24 * 60));
-
-                $orders[] = [
-                    'user_id' => $userId,
-                    'product_id' => $pair->product_id,
-                    'sales_event_id' => $pair->sales_event_id,
-                    'order_no' => sprintf('ORD-%06d-%06d-%06d', $userId, $pair->product_id, $pair->sales_event_id),
-                    'status' => $statuses[$candidateIndex % count($statuses)],
-                    'price' => $pair->event_price ?? 100 + ($candidateIndex % 4900),
-                    'quantity' => 1,
-                    'ordered_at' => $orderedAt,
-                    'created_at' => $seededAt,
-                    'updated_at' => $seededAt,
-                ];
-
-                $candidateIndex++;
-            }
-
-            // Existing rows are ignored, then the deterministic candidate walk continues until 100k are inserted.
-            $inserted += DB::table('orders')->insertOrIgnore($orders);
-
-            $this->command->info('Seeded orders: '.min($inserted, self::ORDER_COUNT).'/'.self::ORDER_COUNT);
-        }
-
-        if ($inserted < self::ORDER_COUNT) {
-            throw new RuntimeException("Only seeded {$inserted} orders before exhausting unique combinations.");
-        }
-
-        $this->seedMissingOrderLogs();
-
-        $this->command->info('Seeder completed.');
+        });
     }
 
     private function seedUsers(): void
