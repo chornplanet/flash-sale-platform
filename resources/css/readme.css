@@ -1,0 +1,421 @@
+:root {
+    color-scheme: light;
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: #f7f8fa;
+    color: #111827;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    background:
+        linear-gradient(135deg, rgba(220, 38, 38, 0.06), transparent 28rem),
+        linear-gradient(315deg, rgba(14, 165, 233, 0.07), transparent 30rem),
+        #f7f8fa;
+}
+
+.readme-top {
+    padding: 24px;
+    border-bottom: 1px solid rgba(17, 24, 39, 0.08);
+    background: rgba(255, 255, 255, 0.82);
+}
+
+.readme-top-nav {
+    width: min(1440px, 100%);
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    color: #374151;
+    font-size: 0.95rem;
+    font-weight: 700;
+}
+
+.readme-top-nav a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.readme-top-nav a:hover {
+    color: #dc2626;
+}
+
+.readme-top-content {
+    width: min(1440px, 100%);
+    margin: 72px auto 52px;
+}
+
+.readme-kicker {
+    margin: 0 0 14px;
+    color: #b91c1c;
+    font-size: 0.78rem;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.readme-top h1 {
+    max-width: 780px;
+    margin: 0;
+    color: #111827;
+    font-size: clamp(2.4rem, 7vw, 5rem);
+    line-height: 0.98;
+    letter-spacing: 0;
+}
+
+.readme-top p:last-child {
+    max-width: 720px;
+    margin: 24px 0 0;
+    color: #4b5563;
+    font-size: 1.12rem;
+    line-height: 1.7;
+}
+
+.readme-layout {
+    width: min(1440px, calc(100% - 32px));
+    margin: 36px auto 72px;
+    display: grid;
+    grid-template-columns: minmax(220px, 260px) minmax(0, 1fr) minmax(220px, 280px);
+    gap: 24px;
+    align-items: start;
+}
+
+.readme-left-panel,
+.readme-right-panel {
+    position: sticky;
+    top: 24px;
+}
+
+.readme-left-panel,
+.readme-contents {
+    padding: 22px;
+    background: rgba(255, 255, 255, 0.88);
+    border: 1px solid rgba(17, 24, 39, 0.08);
+    border-radius: 8px;
+    box-shadow: 0 18px 56px rgba(17, 24, 39, 0.07);
+}
+
+.readme-panel-section + .readme-panel-section {
+    margin-top: 24px;
+    padding-top: 22px;
+    border-top: 1px solid rgba(17, 24, 39, 0.08);
+}
+
+.readme-panel-label {
+    margin: 0 0 10px;
+    color: #b91c1c;
+    font-size: 0.72rem;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.readme-left-panel h2 {
+    margin: 0;
+    color: #111827;
+    font-size: 1.12rem;
+    line-height: 1.25;
+}
+
+.readme-left-panel p:not(.readme-panel-label) {
+    margin: 12px 0 0;
+    color: #4b5563;
+    font-size: 0.92rem;
+    line-height: 1.65;
+}
+
+.readme-left-panel a {
+    display: block;
+    color: #374151;
+    font-size: 0.94rem;
+    font-weight: 700;
+    line-height: 1.7;
+    text-decoration: none;
+}
+
+.readme-left-panel a:hover {
+    color: #dc2626;
+}
+
+.readme-left-panel code {
+    display: block;
+    overflow-x: auto;
+    padding: 10px 12px;
+    border-radius: 8px;
+    background: #111827;
+    color: #f9fafb;
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+    font-size: 0.82rem;
+    line-height: 1.5;
+}
+
+.readme-contents nav {
+    display: grid;
+    gap: 6px;
+    max-height: calc(100vh - 130px);
+    overflow-y: auto;
+    padding-right: 4px;
+}
+
+.readme-contents-link {
+    display: block;
+    padding: 7px 9px;
+    border-radius: 7px;
+    color: #374151;
+    font-size: 0.88rem;
+    font-weight: 700;
+    line-height: 1.35;
+    text-decoration: none;
+}
+
+.readme-contents-link:hover {
+    background: rgba(220, 38, 38, 0.08);
+    color: #b91c1c;
+}
+
+.readme-contents-level-1 {
+    margin-top: 8px;
+    padding: 10px 11px;
+    border: 1px solid rgba(220, 38, 38, 0.16);
+    background: linear-gradient(135deg, rgba(220, 38, 38, 0.10), rgba(255, 255, 255, 0.72));
+    color: #991b1b;
+    font-size: 0.92rem;
+    font-weight: 800;
+    box-shadow: 0 8px 24px rgba(220, 38, 38, 0.07);
+}
+
+.readme-contents-level-1:first-of-type {
+    margin-top: 0;
+}
+
+.readme-contents-level-1:hover {
+    border-color: rgba(220, 38, 38, 0.28);
+    background: linear-gradient(135deg, rgba(220, 38, 38, 0.16), rgba(255, 255, 255, 0.86));
+}
+
+.readme-contents-level-2 {
+    padding-left: 18px;
+    font-weight: 650;
+}
+
+.readme-contents-level-3 {
+    padding-left: 30px;
+    color: #6b7280;
+    font-size: 0.82rem;
+    font-weight: 600;
+}
+
+.readme-document {
+    padding: 48px;
+    background: rgba(255, 255, 255, 0.92);
+    border: 1px solid rgba(17, 24, 39, 0.08);
+    border-radius: 8px;
+    box-shadow: 0 24px 80px rgba(17, 24, 39, 0.08);
+}
+
+.readme-document > :first-child {
+    margin-top: 0;
+}
+
+.readme-document h1,
+.readme-document h2,
+.readme-document h3,
+.readme-document h4 {
+    scroll-margin-top: 24px;
+    color: #111827;
+    letter-spacing: 0;
+}
+
+.readme-document h1 {
+    margin: 0 0 28px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid rgba(17, 24, 39, 0.10);
+    font-size: 2.25rem;
+    line-height: 1.1;
+}
+
+.readme-document h2 {
+    margin: 44px 0 14px;
+    font-size: 1.55rem;
+    line-height: 1.25;
+}
+
+.readme-document h3 {
+    margin: 32px 0 12px;
+    color: #1f2937;
+    font-size: 1.2rem;
+}
+
+.readme-document p,
+.readme-document li {
+    color: #374151;
+    font-size: 1rem;
+    line-height: 1.75;
+}
+
+.readme-document a {
+    color: #dc2626;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.readme-document a:hover {
+    text-decoration: underline;
+}
+
+.readme-document ul,
+.readme-document ol {
+    padding-left: 1.4rem;
+}
+
+.readme-document li + li {
+    margin-top: 6px;
+}
+
+.readme-document code {
+    padding: 0.16rem 0.34rem;
+    border-radius: 5px;
+    background: #f3f4f6;
+    color: #991b1b;
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+    font-size: 0.92em;
+}
+
+.readme-document pre {
+    overflow-x: auto;
+    margin: 18px 0 26px;
+    padding: 18px;
+    border: 1px solid rgba(17, 24, 39, 0.08);
+    border-radius: 8px;
+    background: #111827;
+    color: #f9fafb;
+}
+
+.readme-document pre code {
+    padding: 0;
+    background: transparent;
+    color: inherit;
+    font-size: 0.92rem;
+    line-height: 1.7;
+}
+
+.readme-document table {
+    width: 100%;
+    margin: 22px 0 30px;
+    border-collapse: collapse;
+    overflow: hidden;
+    border: 1px solid rgba(17, 24, 39, 0.10);
+    border-radius: 8px;
+    font-size: 0.95rem;
+}
+
+.readme-document th,
+.readme-document td {
+    padding: 12px 14px;
+    border-bottom: 1px solid rgba(17, 24, 39, 0.08);
+    text-align: left;
+    vertical-align: top;
+}
+
+.readme-document th {
+    background: #f9fafb;
+    color: #111827;
+    font-weight: 800;
+}
+
+.readme-document tr:last-child td {
+    border-bottom: 0;
+}
+
+.readme-document blockquote {
+    margin: 24px 0;
+    padding: 14px 18px;
+    border-left: 4px solid #dc2626;
+    background: rgba(220, 38, 38, 0.06);
+}
+
+.readme-document img {
+    max-width: 100%;
+    height: auto;
+    margin: 20px 0;
+    border: 1px solid rgba(17, 24, 39, 0.08);
+    border-radius: 8px;
+}
+
+@media (max-width: 1180px) {
+    .readme-layout {
+        grid-template-columns: minmax(0, 1fr) minmax(220px, 280px);
+    }
+
+    .readme-left-panel {
+        position: static;
+        grid-column: 1 / -1;
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 18px;
+    }
+
+    .readme-panel-section + .readme-panel-section {
+        margin-top: 0;
+        padding-top: 0;
+        border-top: 0;
+    }
+}
+
+@media (max-width: 860px) {
+    .readme-layout {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .readme-right-panel {
+        position: static;
+        order: -1;
+    }
+
+    .readme-contents nav {
+        max-height: none;
+    }
+}
+
+@media (max-width: 720px) {
+    .readme-top {
+        padding: 20px 16px;
+    }
+
+    .readme-top-nav {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .readme-top-content {
+        margin: 48px auto 34px;
+    }
+
+    .readme-layout {
+        width: min(100% - 24px, 1440px);
+        margin-top: 24px;
+    }
+
+    .readme-left-panel {
+        display: block;
+    }
+
+    .readme-panel-section + .readme-panel-section {
+        margin-top: 24px;
+        padding-top: 22px;
+        border-top: 1px solid rgba(17, 24, 39, 0.08);
+    }
+
+    .readme-document {
+        padding: 28px 18px;
+    }
+
+    .readme-document h1 {
+        font-size: 1.9rem;
+    }
+}

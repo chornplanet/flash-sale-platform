@@ -1,0 +1,105 @@
+services:
+    app:
+        build:
+            context: .
+            dockerfile: docker/php/Dockerfile
+        restart: unless-stopped
+        working_dir: /var/www/html
+        env_file:
+            - ./docker/environment/app.env
+        volumes:
+            - .:/var/www/html
+            - flash_sale_vendor:/var/www/html/vendor
+        command: sh docker/php/start.sh app
+        healthcheck:
+            test: ["CMD-SHELL", "test -f /var/www/html/storage/app/docker-installed"]
+            interval: 10s
+            timeout: 5s
+            retries: 12
+            start_period: 30s
+        depends_on:
+            mysql:
+                condition: service_healthy
+            redis:
+                condition: service_started
+        networks:
+            - flash_sale_network
+
+    nginx:
+        image: nginx:alpine
+        restart: unless-stopped
+        ports:
+            - "${APP_HTTP_PORT:-9080}:80"
+        volumes:
+            - .:/var/www/html:ro
+            - flash_sale_vendor:/var/www/html/vendor:ro
+            - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+        depends_on:
+            - app
+        networks:
+            - flash_sale_network
+
+    mysql:
+        image: mysql:8.4
+        restart: unless-stopped
+        ports:
+            - "${MYSQL_FORWARD_PORT:-9306}:3306"
+        env_file:
+            - ./docker/environment/app.env
+        command:
+            [
+                "--character-set-server=utf8mb4",
+                "--collation-server=utf8mb4_unicode_ci",
+                "--innodb-buffer-pool-size=512M",
+            ]
+        volumes:
+            - flash_sale_mysql_data:/var/lib/mysql
+        healthcheck:
+            test: ["CMD-SHELL", "mysqladmin ping -h localhost -uroot -p$${MYSQL_ROOT_PASSWORD}"]
+            interval: 10s
+            timeout: 5s
+            retries: 10
+        networks:
+            - flash_sale_network
+
+    redis:
+        image: redis:7-alpine
+        restart: unless-stopped
+        ports:
+            - "${REDIS_FORWARD_PORT:-9379}:6379"
+        command: ["redis-server", "--appendonly", "yes"]
+        volumes:
+            - flash_sale_redis_data:/data
+        networks:
+            - flash_sale_network
+
+    queue:
+        build:
+            context: .
+            dockerfile: docker/php/Dockerfile
+        restart: unless-stopped
+        working_dir: /var/www/html
+        env_file:
+            - ./docker/environment/app.env
+        volumes:
+            - .:/var/www/html
+            - flash_sale_vendor:/var/www/html/vendor
+        command: sh docker/php/start.sh horizon
+        depends_on:
+            app:
+                condition: service_healthy
+            mysql:
+                condition: service_healthy
+            redis:
+                condition: service_started
+        networks:
+            - flash_sale_network
+
+volumes:
+    flash_sale_mysql_data:
+    flash_sale_redis_data:
+    flash_sale_vendor:
+
+networks:
+    flash_sale_network:
+        driver: bridge
