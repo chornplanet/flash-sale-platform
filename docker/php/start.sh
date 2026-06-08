@@ -2,6 +2,7 @@
 set -eu
 
 ENV_FILE="${APP_ENV_FILE:-/var/www/html/docker/environment/app.env}"
+DOTENV_FILE="${APP_DOTENV_FILE:-/var/www/html/.env}"
 
 normalize_env_value() {
     value="$(printf '%s' "$1" | tr -d '\r')"
@@ -15,6 +16,14 @@ normalize_env_value() {
 
 escape_php_fpm_value() {
     printf '%s' "$1" | sed 's/\\/\\\\/g; s/"/\\"/g'
+}
+
+sync_dotenv_file() {
+    if [ ! -f "$ENV_FILE" ]; then
+        return
+    fi
+
+    cp "$ENV_FILE" "$DOTENV_FILE"
 }
 
 load_environment_file() {
@@ -71,18 +80,22 @@ write_php_fpm_environment() {
 case "${1:-app}" in
     app)
         rm -f storage/app/docker-installed
+        sync_dotenv_file
         load_environment_file
         php artisan app:install
+        sync_dotenv_file
         load_environment_file
         write_php_fpm_environment
         touch storage/app/docker-installed
         exec php-fpm
         ;;
     horizon)
+        sync_dotenv_file
         load_environment_file
         exec php artisan horizon
         ;;
     *)
+        sync_dotenv_file
         load_environment_file
         exec "$@"
         ;;
