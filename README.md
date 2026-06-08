@@ -906,11 +906,16 @@ And: `Never concatenate user input into SQL. Use Eloquent, Query Builder, or par
 
 # Task 6: Unit & Feature Testing
 
-## 6.1 ProductServiceTest
+## 6.1 Test Command on docker compose environment
 
 ```
-php artisan test tests/Unit/ProductServiceTest.php
+docker compose exec app php artisan test tests/Unit/ProductServiceTest.php
+docker compose exec app php artisan test tests/Feature/OrderPurchaseTest.php
+```
 
+## 6.2 ProductServiceTest result
+
+```
    PASS  Tests\Unit\ProductServiceTest
   ✓ reduce stock succeeds when enough stock is available
   ✓ reduce stock fails when stock is insufficient
@@ -920,11 +925,9 @@ php artisan test tests/Unit/ProductServiceTest.php
   Tests:    4 passed (8 assertions)
 ```
 
-## 6.2 OrderServiceTest
+## 6.3 OrderServiceTest result
 
 ```
-php artisan test tests/Feature/OrderPurchaseTest.php
-
    PASS  Tests\Feature\OrderPurchaseTest
   ✓ authenticated user can place an order
   ✓ order placement fails when product is out of stock
