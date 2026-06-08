@@ -26,6 +26,20 @@ sync_dotenv_file() {
     cp "$ENV_FILE" "$DOTENV_FILE"
 }
 
+prepare_runtime_directories() {
+    mkdir -p \
+        bootstrap/cache \
+        storage/app/public \
+        storage/framework/cache/data \
+        storage/framework/sessions \
+        storage/framework/testing \
+        storage/framework/views \
+        storage/logs
+
+    chown -R www-data:www-data bootstrap/cache storage
+    chmod -R ug+rwX bootstrap/cache storage
+}
+
 load_environment_file() {
     if [ ! -f "$ENV_FILE" ]; then
         return
@@ -81,9 +95,11 @@ case "${1:-app}" in
     app)
         rm -f storage/app/docker-installed
         sync_dotenv_file
+        prepare_runtime_directories
         load_environment_file
         php artisan app:install
         sync_dotenv_file
+        prepare_runtime_directories
         load_environment_file
         write_php_fpm_environment
         touch storage/app/docker-installed
@@ -91,11 +107,13 @@ case "${1:-app}" in
         ;;
     horizon)
         sync_dotenv_file
+        prepare_runtime_directories
         load_environment_file
         exec php artisan horizon
         ;;
     *)
         sync_dotenv_file
+        prepare_runtime_directories
         load_environment_file
         exec "$@"
         ;;
